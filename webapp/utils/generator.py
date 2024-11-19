@@ -1,14 +1,21 @@
-# generator.py
+# utils/generator.py
 
 import torch
 
 def generate_recipe(prompt, model, tokenizer, max_length=250):
     """
     Generate a fruit cocktail recipe using the provided prompt.
+    Args:
+        prompt (str): User input to generate the recipe.
+        model: Pre-trained or fine-tuned model to generate text.
+        tokenizer: Tokenizer associated with the model.
+        max_length (int): The maximum length for the generated output.
+    Returns:
+        str: Generated recipe text.
     """
     # Construct the structured prompt
     structured_prompt = (
-        f"Create a detailed fruit cocktail recipe using {prompt}. The recipe should have two parts:\n"
+        f" The recipe should have two parts:\n"
         "- Ingredients: Provide a detailed list of ingredients required.\n"
         "- Instructions: Write clear step-by-step preparation instructions for the fruit cocktail."
     )

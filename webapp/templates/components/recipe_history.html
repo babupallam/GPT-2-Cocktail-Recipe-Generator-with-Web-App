@@ -17,7 +17,8 @@
                                 <span class="material-icons text-danger action-icon" onclick="deleteRecipe({{ loop.index }});">delete</span>
                             </div>
                         </div>
-                        <p class="card-text">{{ recipe }}</p>
+                        <p class="card-text"><strong>Prompt:</strong> {{ recipe['prompt'] }}</p>
+                        <p class="card-text"><strong>Recipe:</strong> {{ recipe['recipe'] }}</p>
                     </div>
                 </div>
             </div>
