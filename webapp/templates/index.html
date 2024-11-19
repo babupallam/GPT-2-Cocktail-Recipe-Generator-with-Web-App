@@ -15,10 +15,11 @@
 
 <body>
     <div class="container mt-4">
-        <h1 class="text-center mb-3">Fruit Cocktail Recipe Generator</h1>
+        <!-- Header Section -->
+        <h1 class="text-center mb-3">🍹 Fruit Cocktail Recipe Generator 🍊</h1>
 
         <!-- Example Inputs Section -->
-        <div class="mb-3">
+        <div class="mb-4">
             <h5 class="text-center">Try These Example Prompts:</h5>
             <div class="d-flex justify-content-center flex-wrap">
                 <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Create a cocktail with mango and orange')">
@@ -36,30 +37,43 @@
             </div>
         </div>
 
-        <div class="card p-3 mb-3 shadow">
-            <form method="POST" action="/" onsubmit="showSpinner(); showToast();">
-                <div class="mb-3">
-                    <label for="prompt" class="form-label">Enter the ingredients or details for your cocktail:</label>
-                    <textarea class="form-control" id="prompt" name="prompt" rows="3" required placeholder="Click to type..."></textarea>
+        <!-- Two-Column Layout -->
+        <div class="row">
+            <!-- Form Column -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card p-4 shadow">
+                    <form method="POST" action="/" onsubmit="showSpinner(); showToast();">
+                        <div class="mb-3">
+                            <label for="prompt" class="form-label">Enter the ingredients or details for your cocktail:</label>
+                            <textarea class="form-control" id="prompt" name="prompt" rows="6" required placeholder="Click to type..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">Generate Recipe</button>
+                    </form>
+                    <div id="spinner" class="spinner-border text-primary mt-4 d-none" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 btn-md">Generate Recipe</button>
-            </form>
-            <div id="spinner" class="spinner-border text-primary mt-3 d-none" role="status">
-                <span class="visually-hidden">Loading...</span>
+            </div>
+
+            <!-- Generated Recipe Column -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                {% if generated_recipe %}
+                <div class="card p-4 bg-light border-left-primary shadow-sm h-100">
+                    <h2 class="text-primary"><span class="material-icons">star</span> Generated Recipe:</h2>
+                    <p>{{ generated_recipe }}</p>
+                </div>
+                {% else %}
+                <div class="card p-4 bg-light border-left-primary shadow-sm h-100 d-flex align-items-center justify-content-center">
+                    <h4 class="text-secondary">Your generated recipe will appear here...</h4>
+                </div>
+                {% endif %}
             </div>
         </div>
 
-        {% if generated_recipe %}
-        <div class="card mt-4 p-3 bg-light border-left-primary shadow-sm">
-            <h2 class="text-primary"><span class="material-icons">star</span> Generated Recipe:</h2>
-            <p>{{ generated_recipe }}</p>
-        </div>
-        {% endif %}
-
-        <!-- Display Recipe History -->
+        <!-- Recipe History Section -->
         {% if recipe_history and recipe_history|length > 0 %}
-        <div class="card mt-4 p-3">
-            <h2 class="text-success"><span class="material-icons">history</span> Recipe History:</h2>
+        <div class="card mt-4 p-4 shadow">
+            <h2 class="text-success mb-3"><span class="material-icons">history</span> Recipe History:</h2>
             <div class="recipe-history">
                 <div class="row">
                     {% for recipe in recipe_history %}
