@@ -117,7 +117,7 @@ To set up this project locally, please follow these steps:
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/fruit-cocktail-generator.git
+   git clone https://github.com/babupallam/fruit-cocktail-generator.git
    cd fruit-cocktail-generator
    ```
 
