@@ -1,48 +1,28 @@
 from flask import Flask, render_template, request
-import torch
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
-import os
+from model import load_model_and_tokenizer
+from generator import generate_recipe
 
+# Create Flask app
 app = Flask(__name__, template_folder='../webapp/templates', static_folder='../webapp/static')
 
-# Load the fine-tuned model and tokenizer
-model_path = os.path.join("model", "fine_tuned_gpt2")
-model = GPT2LMHeadModel.from_pretrained(model_path)
-tokenizer = GPT2Tokenizer.from_pretrained(model_path)
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
+# Load model, tokenizer, and set device
+model, tokenizer, device = load_model_and_tokenizer()
 
-def generate_recipe(prompt, max_length=150):
-    input_ids = tokenizer.encode(prompt, return_tensors='pt').to(device)
-    attention_mask = (input_ids != tokenizer.pad_token_id).long().to(device)
-
-    output = model.generate(
-        input_ids=input_ids,
-        attention_mask=attention_mask,
-        max_length=max_length,
-        num_return_sequences=1,
-        temperature=0.7,
-        top_p=0.9,
-        top_k=50,
-        do_sample=True,
-        repetition_penalty=2.0,
-        pad_token_id=tokenizer.pad_token_id
-    )
-
-    return tokenizer.decode(output[0], skip_special_tokens=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    """
+    Handle the '/' route.
+    Render the main page where users can input prompts to generate a recipe.
+    """
     generated_recipe = None
     if request.method == 'POST':
         prompt = request.form.get('prompt')
         if prompt:
-            generated_recipe = generate_recipe(prompt)
+            generated_recipe = generate_recipe(prompt, model, tokenizer, device)
 
     return render_template('index.html', generated_recipe=generated_recipe)
 
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
