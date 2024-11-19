@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+    {% include 'components/nav_tabs.html' %}
+    <div class="tab-content mt-4">
+        {% include 'components/generate_recipe.html' %}
+        {% include 'components/recipe_history.html' %}
+        {% include 'components/favorites.html' %}
+    </div>
+    {% include 'components/edit_modal.html' %}
+    {% include 'components/toast_notification.html' %}
+{% endblock %}

@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<!-- Generate Recipe Tab -->
+<div class="tab-pane fade show active" id="generate">
+    <div class="row">
+        {% include 'components/example_prompts.html' %}
+
+        <!-- Form for Generating Recipe -->
+        <div class="col-lg-6 mb-4">
+            <div class="card p-4 shadow">
+                <form method="POST" action="/" onsubmit="showSpinner(); showToast();">
+                    <div class="mb-3">
+                        <label for="prompt" class="form-label">Enter the ingredients or details for your cocktail:</label>
+                        <textarea class="form-control" id="prompt" name="prompt" rows="6" required placeholder="Click to type..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 btn-lg">Generate Recipe</button>
+                </form>
+                <div id="spinner" class="spinner-border text-primary mt-4 d-none" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated Recipe Column -->
+        <div class="col-lg-6 mb-4">
+            {% if generated_recipe %}
+            <div class="card p-4 bg-light border-left-primary shadow-sm h-100">
+                <h2 class="text-primary"><span class="material-icons">star</span> Generated Recipe:</h2>
+                <p>{{ generated_recipe }}</p>
+            </div>
+            {% else %}
+            <div class="card p-4 bg-light border-left-primary shadow-sm h-100 d-flex align-items-center justify-content-center">
+                <h4 class="text-secondary">Your generated recipe will appear here...</h4>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

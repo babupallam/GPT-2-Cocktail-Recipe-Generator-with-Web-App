@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<!-- Favorites Tab -->
+<div class="tab-pane fade" id="favorites">
+    {% if favorites and favorites|length > 0 %}
+    <div class="favorites-section">
+        <div class="row">
+            {% for favorite in favorites %}
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card shadow-sm border-success hover-scale h-100 favorite-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title text-success">
+                                <span class="material-icons">favorite</span> Favorite {{ loop.index }}
+                            </h5>
+                            <div class="recipe-actions">
+                                <span class="material-icons text-danger action-icon" onclick="deleteRecipe({{ loop.index }});">delete</span>
+                            </div>
+                        </div>
+                        <p class="card-text">{{ favorite }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <h5 class="text-center text-secondary">No favorite recipes yet...</h5>
+    {% endif %}
+</div>
