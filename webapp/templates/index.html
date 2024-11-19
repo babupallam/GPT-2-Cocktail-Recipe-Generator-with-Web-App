@@ -13,92 +13,153 @@
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 </head>
 
-<body>
+<body class="light-theme">
     <div class="container mt-4">
         <!-- Header Section -->
         <h1 class="text-center mb-3">🍹 Fruit Cocktail Recipe Generator 🍊</h1>
 
-        <!-- Example Inputs Section -->
-        <div class="mb-4">
-            <h5 class="text-center">Try These Example Prompts:</h5>
-            <div class="d-flex justify-content-center flex-wrap">
-                <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Create a cocktail with mango and orange')">
-                    Create a cocktail with mango and orange
-                </button>
-                <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Create a tropical fruit cocktail with pineapple and coconut')">
-                    Create a tropical fruit cocktail with pineapple and coconut
-                </button>
-                <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Make a refreshing summer cocktail with strawberries and basil')">
-                    Make a refreshing summer cocktail with strawberries and basil
-                </button>
-                <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Generate a winter-themed fruit cocktail with cranberries and cinnamon')">
-                    Generate a winter-themed fruit cocktail with cranberries and cinnamon
-                </button>
-            </div>
+        <!-- Theme Switcher -->
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-secondary" id="themeSwitcher" onclick="toggleTheme()">Toggle Light/Dark Mode</button>
         </div>
 
-        <!-- Two-Column Layout -->
-        <div class="row">
-            <!-- Form Column -->
-            <div class="col-lg-6 col-md-12 mb-4">
-                <div class="card p-4 shadow">
-                    <form method="POST" action="/" onsubmit="showSpinner(); showToast();">
-                        <div class="mb-3">
-                            <label for="prompt" class="form-label">Enter the ingredients or details for your cocktail:</label>
-                            <textarea class="form-control" id="prompt" name="prompt" rows="6" required placeholder="Click to type..."></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 btn-lg">Generate Recipe</button>
-                    </form>
-                    <div id="spinner" class="spinner-border text-primary mt-4 d-none" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs mt-3" id="recipeTabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#generate" data-bs-toggle="tab">Generate Recipe</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#history" data-bs-toggle="tab">Recipe History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#favorites" data-bs-toggle="tab">Favorites</a>
+            </li>
+        </ul>
 
-            <!-- Generated Recipe Column -->
-            <div class="col-lg-6 col-md-12 mb-4">
-                {% if generated_recipe %}
-                <div class="card p-4 bg-light border-left-primary shadow-sm h-100">
-                    <h2 class="text-primary"><span class="material-icons">star</span> Generated Recipe:</h2>
-                    <p>{{ generated_recipe }}</p>
-                </div>
-                {% else %}
-                <div class="card p-4 bg-light border-left-primary shadow-sm h-100 d-flex align-items-center justify-content-center">
-                    <h4 class="text-secondary">Your generated recipe will appear here...</h4>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Recipe History Section -->
-        {% if recipe_history and recipe_history|length > 0 %}
-        <div class="card mt-4 p-4 shadow">
-            <h2 class="text-success mb-3"><span class="material-icons">history</span> Recipe History:</h2>
-            <div class="recipe-history">
+        <div class="tab-content mt-4">
+            <!-- Generate Recipe Tab -->
+            <div class="tab-pane fade show active" id="generate">
                 <div class="row">
-                    {% for recipe in recipe_history %}
-                    <div class="col-md-6 col-lg-4 mb-3">
-                        <div class="card shadow-sm border-info hover-scale h-100 recipe-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title text-info">
-                                        <span class="material-icons">receipt</span> Recipe {{ loop.index }}
-                                    </h5>
-                                    <div class="recipe-actions">
-                                        <span class="material-icons text-primary action-icon" onclick="favoriteRecipe({{ loop.index }});">favorite_border</span>
-                                        <span class="material-icons text-warning action-icon" onclick="editRecipe({{ loop.index }});">edit</span>
-                                        <span class="material-icons text-danger action-icon" onclick="deleteRecipe({{ loop.index }});">delete</span>
-                                    </div>
+                    <!-- Example Prompts Section -->
+                    <div class="mb-4">
+                        <h5 class="text-center">Try These Example Prompts:</h5>
+                        <div class="d-flex justify-content-center flex-wrap">
+                            <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Create a cocktail with mango and orange')">
+                                Create a cocktail with mango and orange
+                            </button>
+                            <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Create a tropical fruit cocktail with pineapple and coconut')">
+                                Create a tropical fruit cocktail with pineapple and coconut
+                            </button>
+                            <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Make a refreshing summer cocktail with strawberries and basil')">
+                                Make a refreshing summer cocktail with strawberries and basil
+                            </button>
+                            <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Generate a winter-themed fruit cocktail with cranberries and cinnamon')">
+                                Generate a winter-themed fruit cocktail with cranberries and cinnamon
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form for Generating Recipe -->
+                    <div class="col-lg-12 mb-4">
+                        <div class="card p-4 shadow">
+                            <form method="POST" action="/" onsubmit="showSpinner(); showToast();">
+                                <div class="mb-3">
+                                    <label for="prompt" class="form-label">Enter the ingredients or details for your cocktail:</label>
+                                    <textarea class="form-control" id="prompt" name="prompt" rows="6" required placeholder="Click to type..."></textarea>
                                 </div>
-                                <p class="card-text">{{ recipe }}</p>
+                                <button type="submit" class="btn btn-primary w-100 btn-lg">Generate Recipe</button>
+                            </form>
+                            <div id="spinner" class="spinner-border text-primary mt-4 d-none" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Recipe History Tab -->
+            <div class="tab-pane fade" id="history">
+                <!-- Search Bar for Recipe History -->
+                <div class="mb-4">
+                    <input type="text" id="searchBar" class="form-control" onkeyup="filterRecipes()" placeholder="Search recipes...">
+                </div>
+                {% if recipe_history and recipe_history|length > 0 %}
+                <div class="recipe-history">
+                    <div class="row">
+                        {% for recipe in recipe_history %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card shadow-sm border-info hover-scale h-100 recipe-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title text-info">
+                                            <span class="material-icons">receipt</span> Recipe {{ loop.index }}
+                                        </h5>
+                                        <div class="recipe-actions">
+                                            <span class="material-icons text-primary action-icon" onclick="favoriteRecipe({{ loop.index }});">favorite_border</span>
+                                            <span class="material-icons text-warning action-icon" onclick="editRecipeModal({{ loop.index }});">edit</span>
+                                            <span class="material-icons text-danger action-icon" onclick="deleteRecipe({{ loop.index }});">delete</span>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">{{ recipe }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <h5 class="text-center text-secondary">No recipes found in the history...</h5>
+                {% endif %}
+            </div>
+
+            <!-- Favorites Tab -->
+            <div class="tab-pane fade" id="favorites">
+                {% if favorites and favorites|length > 0 %}
+                <div class="favorites-section">
+                    <div class="row">
+                        {% for favorite in favorites %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card shadow-sm border-success hover-scale h-100 favorite-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title text-success">
+                                            <span class="material-icons">favorite</span> Favorite {{ loop.index }}
+                                        </h5>
+                                        <div class="recipe-actions">
+                                            <span class="material-icons text-danger action-icon" onclick="deleteRecipe({{ loop.index }});">delete</span>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">{{ favorite }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <h5 class="text-center text-secondary">No favorite recipes yet...</h5>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Recipe Modal -->
+    <div class="modal fade" id="editRecipeModal" tabindex="-1" aria-labelledby="editRecipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRecipeModalLabel">Edit Recipe</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" id="editRecipeTextarea" rows="5"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEditedRecipe()">Save changes</button>
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
 
     <!-- Toast notification -->
