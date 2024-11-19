@@ -1,6 +1,6 @@
-# GPT-2 Cocktail Recipe Generator with Web App
+# RecipeNLG-on-GPT-2-Cocktail-Recipe-Generator-with-Web-App
 
-Welcome to the **GPT-2 Cocktail Recipe Generator with Web App**! This project provides an engaging and interactive application that allows users to generate unique cocktail recipes using a fine-tuned version of OpenAI's GPT-2 model. This repository also includes the necessary scripts for data preparation, model training, and deployment of a user-friendly web application.
+Welcome to the **RecipeNLG-on-GPT-2-Cocktail-Recipe-Generator-with-Web-App**! This project provides an engaging and interactive application that allows users to generate unique cocktail recipes using a fine-tuned version of OpenAI's GPT-2 model. This repository also includes the necessary scripts for data preparation, model training, and deployment of a user-friendly web application.
 
 ![Fruit Cocktail Recipe Generator Light Theme](webapp/images/dark_theme_screenshot.png)
 
