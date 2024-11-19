@@ -35,3 +35,40 @@ function deleteRecipe(index) {
     // Functionality to handle deleting a recipe (currently just showing an alert)
     alert(`Deleting recipe ${index} functionality is under construction.`);
 }
+
+// JavaScript to handle light/dark mode switching
+function toggleTheme() {
+    const body = document.body;
+    const themeSwitcher = document.getElementById('themeSwitcher');
+
+    // Toggle the theme class on body
+    if (body.classList.contains('light-theme')) {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark');
+        themeSwitcher.innerText = "Switch to Light Mode";
+    } else {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+        localStorage.setItem('theme', 'light');
+        themeSwitcher.innerText = "Switch to Dark Mode";
+    }
+}
+
+// Function to load the theme from localStorage when the page loads
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const body = document.body;
+    const themeSwitcher = document.getElementById('themeSwitcher');
+
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-theme');
+        themeSwitcher.innerText = "Switch to Light Mode";
+    } else {
+        body.classList.add('light-theme');
+        themeSwitcher.innerText = "Switch to Dark Mode";
+    }
+}
+
+// Run loadTheme() when the page is loaded to apply the stored theme
+document.addEventListener("DOMContentLoaded", loadTheme);

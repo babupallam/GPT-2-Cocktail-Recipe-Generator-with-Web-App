@@ -20,7 +20,7 @@
 
         <!-- Theme Switcher -->
         <div class="d-flex justify-content-end">
-            <button class="btn btn-outline-secondary" id="themeSwitcher" onclick="toggleTheme()">Toggle Light/Dark Mode</button>
+            <button class="btn btn-outline-secondary" id="themeSwitcher" onclick="toggleTheme()">Switch to Dark Mode</button>
         </div>
 
         <!-- Navigation Tabs -->
@@ -36,13 +36,14 @@
             </li>
         </ul>
 
+        <!-- Tab Content -->
         <div class="tab-content mt-4">
             <!-- Generate Recipe Tab -->
             <div class="tab-pane fade show active" id="generate">
                 <div class="row">
                     <!-- Example Prompts Section -->
                     <div class="mb-4">
-                        <h5 class="text-center">Try These Example Prompts:</h5>
+                        <h5 class="text-center text-light">Try These Example Prompts:</h5>
                         <div class="d-flex justify-content-center flex-wrap">
                             <button class="btn btn-light m-1 example-button shadow-sm" onclick="setExamplePrompt('Create a cocktail with mango and orange')">
                                 Create a cocktail with mango and orange
@@ -60,7 +61,7 @@
                     </div>
 
                     <!-- Form for Generating Recipe -->
-                    <div class="col-lg-12 mb-4">
+                    <div class="col-lg-6 mb-4">
                         <div class="card p-4 shadow">
                             <form method="POST" action="/" onsubmit="showSpinner(); showToast();">
                                 <div class="mb-3">
@@ -74,15 +75,26 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Generated Recipe Column -->
+                    <div class="col-lg-6 mb-4">
+                        {% if generated_recipe %}
+                        <div class="card p-4 bg-light border-left-primary shadow-sm h-100">
+                            <h2 class="text-primary"><span class="material-icons">star</span> Generated Recipe:</h2>
+                            <p>{{ generated_recipe }}</p>
+                        </div>
+                        {% else %}
+                        <div class="card p-4 bg-light border-left-primary shadow-sm h-100 d-flex align-items-center justify-content-center">
+                            <h4 class="text-secondary">Your generated recipe will appear here...</h4>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
             <!-- Recipe History Tab -->
             <div class="tab-pane fade" id="history">
-                <!-- Search Bar for Recipe History -->
-                <div class="mb-4">
-                    <input type="text" id="searchBar" class="form-control" onkeyup="filterRecipes()" placeholder="Search recipes...">
-                </div>
+                <!-- Recipe History Section -->
                 {% if recipe_history and recipe_history|length > 0 %}
                 <div class="recipe-history">
                     <div class="row">
@@ -162,7 +174,7 @@
         </div>
     </div>
 
-    <!-- Toast notification -->
+    <!-- Toast Notification -->
     <div class="toast position-fixed bottom-0 end-0 p-3" id="toast" style="z-index: 11;">
         <div class="toast-body">
             Recipe generated successfully! 🍹
