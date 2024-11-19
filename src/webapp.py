@@ -3,7 +3,7 @@ import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../webapp/templates')
 
 # Load the fine-tuned model and tokenizer
 model_path = os.path.join("model", "fine_tuned_gpt2")
