@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import os
 
-app = Flask(__name__, template_folder='../webapp/templates')
+app = Flask(__name__, template_folder='../webapp/templates', static_folder='../webapp/static')
 
 # Load the fine-tuned model and tokenizer
 model_path = os.path.join("model", "fine_tuned_gpt2")
@@ -12,9 +12,7 @@ tokenizer = GPT2Tokenizer.from_pretrained(model_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
-
 def generate_recipe(prompt, max_length=150):
-    # Generate a recipe based on the user prompt
     input_ids = tokenizer.encode(prompt, return_tensors='pt').to(device)
     attention_mask = (input_ids != tokenizer.pad_token_id).long().to(device)
 
@@ -33,7 +31,6 @@ def generate_recipe(prompt, max_length=150):
 
     return tokenizer.decode(output[0], skip_special_tokens=True)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     generated_recipe = None
@@ -44,6 +41,8 @@ def index():
 
     return render_template('index.html', generated_recipe=generated_recipe)
 
-
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
