@@ -104,3 +104,6 @@ h5py~=3.11.0
 msgpack-python~=1.0.3
 transformers[torch]
 accelerate>=0.26.0
+flask
+torch
+transformers
